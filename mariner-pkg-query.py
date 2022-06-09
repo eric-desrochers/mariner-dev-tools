@@ -22,6 +22,7 @@ base = dnf.Base()
 conf = base.conf
 conf.cachedir = cachedir
 conf.substitutions['basearch'] = arch
+conf.skip_if_unavailable = True
 
 
 # Mariner 1.0
