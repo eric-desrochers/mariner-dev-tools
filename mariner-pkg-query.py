@@ -6,7 +6,6 @@ import argparse
 
 parser=argparse.ArgumentParser(
     description='''Remotely query the Mariner archive database about packages''')
-parser.add_argument('--arch', type=str, default='x86_64', help='CPU Architecture: x86_64 or aarch64')
 parser.add_argument('package', nargs='*', default=[1, 2, 3], help='Package name(s)')
 args=parser.parse_args()
 
@@ -15,50 +14,63 @@ if len(sys.argv) == 1:
     parser.print_help(sys.stderr)
     sys.exit(1)
 
-# [Woraround] Redirecting stderr to /dev/null for repo with no repodata/respomd.xml
+# [Workaround] Redirecting stderr to /dev/null for repo with no repodata/respomd.xml
 f = open('/dev/null', 'w')
 sys.stderr = f
 
 cachedir = '_dnf_cache_dir'
-arch = args.arch
 
 base = dnf.Base()
 conf = base.conf
 conf.cachedir = cachedir
-conf.substitutions['basearch'] = arch
 conf.skip_if_unavailable = True
 
+def cm1():
+    """
+    Function to find package in Mariner 1.0
+    """
 
-# Mariner 1.0
-#version= float(1)
+    cmver = float(1)
+    cm1_repos = ["base", "Microsoft", "coreui", "extras", "update"]
+    for cm1_repo in cm1_repos:
+        x86repo_name = "x86_64_cm1_" + cm1_repo
+        arm64repo_name = "arm64_cm1_" + cm1_repo
+        base.repos.add_new_repo(x86repo_name, conf,
+            baseurl=["https://packages.microsoft.com/cbl-mariner/1.0/prod/"+ cm1_repo + "/" + "x86_64" + "/rpms"])
+        base.repos.add_new_repo(arm64repo_name, conf,
+            baseurl=["https://packages.microsoft.com/cbl-mariner/1.0/prod/"+ cm1_repo + "/" + "aarch64" + "/rpms"])
+    base.fill_sack(load_system_repo=False)
 
-cm1_repos = ["base", "Microsoft", "coreui", "extras", "update"]
-for cm1_repo in cm1_repos:
-    repo_name = "Mariner1_" + cm1_repo
-    base.repos.add_new_repo(repo_name, conf,
-        baseurl=["https://packages.microsoft.com/cbl-mariner/1.0/prod/"+ cm1_repo + "/" + arch + "/rpms"])
-base.fill_sack(load_system_repo=False)
+    result = base.sack.query().filter(name=sys.argv[1]).available().latest()
+    if result:
+        for pkg in result:
+            print('| Mariner {} | {}\t| {}\t| {}\t| {}'.format(cmver, pkg.name,pkg.version,pkg.arch, pkg.reponame))
+    else:
+            print('| Mariner {} | not found'.format(cmver))
 
-result = base.sack.query().filter(name=sys.argv[1]).latest()
-if result:
-    for pkg in result:
-        print('[Mariner 1.0] {} in {}'.format(pkg, pkg.reponame))
-else:
-        print('[Mariner 1.0] not found')
+def cm2():
+    """
+    Function to find package in Mariner 1.0
+    """
 
-# Mariner 2.0
-#version= float(2)
+    cmver = float(2)
+    cm2_repos = ["base", "Microsoft", "extended", "extras", "nvidia"]
+    for cm2_repo in cm2_repos:
+        x86repo_name = "x86_64_cm2_" + cm2_repo
+        arm64repo_name = "arm64_cm2_" + cm2_repo
+        base.repos.add_new_repo(x86repo_name, conf,
+            baseurl=["https://packages.microsoft.com/cbl-mariner/2.0/prod/" + cm2_repo + "/" + "x86_64"])
+        base.repos.add_new_repo(arm64repo_name, conf,
+            baseurl=["https://packages.microsoft.com/cbl-mariner/2.0/prod/" + cm2_repo + "/" + "aarch64"])
+    base.fill_sack(load_system_repo=False)
 
-cm2_repos = ["base", "Microsoft", "extended", "extras", "nvidia"]
-for cm2_repo in cm2_repos:
-    repo_name = "Mariner2_" + cm2_repo
-    base.repos.add_new_repo(repo_name, conf,
-        baseurl=["https://packages.microsoft.com/cbl-mariner/2.0/prod/" + cm2_repo + "/" + arch])
-base.fill_sack(load_system_repo=False)
+    result = base.sack.query().filter(name=sys.argv[1]).latest()
+    if result:
+        for pkg in result:
+            print('| Mariner {} | {}\t| {}\t| {}\t| {}'.format(cmver, pkg.name,pkg.version,pkg.arch, pkg.reponame))
+    else:
+            print('| Mariner {} | not found'.format(cmver))
 
-result = base.sack.query().filter(name=sys.argv[1]).latest()
-if result:
-    for pkg in result:
-        print('[Mariner 2.0] {} in {}'.format(pkg, pkg.reponame))
-else:
-        print('[Mariner 2.0] not found')
+# Executing functions
+cm1()
+cm2()
