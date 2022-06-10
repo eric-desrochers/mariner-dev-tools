@@ -44,7 +44,7 @@ def cm1():
     result = base.sack.query().filter(name=sys.argv[1]).available().latest()
     if result:
         for pkg in result:
-            print('| Mariner {} | {}\t| {}\t| {}\t| {}'.format(cmver, pkg.name,pkg.version,pkg.arch, pkg.reponame))
+            print('| Mariner {} | {}\t| {}\t| {}\t| {}'.format(cmver, pkg.name,pkg.evr,pkg.arch, pkg.reponame))
     else:
             print('| Mariner {} | not found'.format(cmver))
 
@@ -67,7 +67,7 @@ def cm2():
     result = base.sack.query().filter(name=sys.argv[1]).available().latest()
     if result:
         for pkg in result:
-            print('| Mariner {} | {}\t| {}\t| {}\t| {}'.format(cmver, pkg.name,pkg.version,pkg.arch, pkg.reponame))
+            print('| Mariner {} | {}\t| {}\t| {}\t| {}'.format(cmver, pkg.name,pkg.evr,pkg.arch, pkg.reponame))
     else:
             print('| Mariner {} | not found'.format(cmver))
 
