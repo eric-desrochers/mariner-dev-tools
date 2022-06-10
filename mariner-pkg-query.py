@@ -64,7 +64,7 @@ def cm2():
             baseurl=["https://packages.microsoft.com/cbl-mariner/2.0/prod/" + cm2_repo + "/" + "aarch64"])
     base.fill_sack(load_system_repo=False)
 
-    result = base.sack.query().filter(name=sys.argv[1]).latest()
+    result = base.sack.query().filter(name=sys.argv[1]).available().latest()
     if result:
         for pkg in result:
             print('| Mariner {} | {}\t| {}\t| {}\t| {}'.format(cmver, pkg.name,pkg.version,pkg.arch, pkg.reponame))
