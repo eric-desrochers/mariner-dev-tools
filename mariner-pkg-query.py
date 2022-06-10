@@ -15,6 +15,10 @@ if len(sys.argv) == 1:
     parser.print_help(sys.stderr)
     sys.exit(1)
 
+# [Woraround] Redirecting stderr to /dev/null for repo with no repodata/respomd.xml
+f = open('/dev/null', 'w')
+sys.stderr = f
+
 cachedir = '_dnf_cache_dir'
 arch = args.arch
 
