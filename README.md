@@ -1,8 +1,10 @@
 # mariner-dev-tools
 Tool to remotely query the Mariner archive database about packages
 
+* mariner-pkg-query.py
+
 ## Status
-Development mode
+Development
 
 ## Support
 | Mariner   | x86_64 | aarch64 | debuginfo |
@@ -22,5 +24,5 @@ $ ./mariner-pkg-query.py shadow-utils
 |   2.0   | shadow-utils | shadow-utils-debuginfo | 4.9-9.cm2 |  x86_64 |  base  |
 |   2.0   | shadow-utils | shadow-utils-debuginfo | 4.9-9.cm2 | aarch64 |  base  |
 
-## Todo list
-* Ignore case for package with upper case (e.g., WALinuxAgent)
+## Getting started 
+[Official DNF API reference](https://dnf.readthedocs.io/en/latest/api.html)
