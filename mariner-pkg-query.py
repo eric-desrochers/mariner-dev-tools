@@ -1,12 +1,18 @@
 #!/usr/bin/python3
 
+__author__ = "Eric Desrochers"
+__maintainer = "Eric Desrochers"
+__version__ = "1.0"
+__status__ = "Development"
+
 import dnf
 import sys
 import argparse
+from prettytable import PrettyTable
 
 parser=argparse.ArgumentParser(
     description='''Remotely query the Mariner archive database about packages''')
-parser.add_argument('package', nargs='*', default=[1, 2, 3], help='Package name(s)')
+parser.add_argument('package', nargs=1, help='Package name')
 args=parser.parse_args()
 
 # If no argument is pass to the script
@@ -18,12 +24,17 @@ if len(sys.argv) == 1:
 f = open('/dev/null', 'w')
 sys.stderr = f
 
+# Setting up the cache
 cachedir = '_dnf_cache_dir'
 
+# Configuration
 base = dnf.Base()
 conf = base.conf
 conf.cachedir = cachedir
 conf.skip_if_unavailable = True
+
+# Prettytable
+myTable = PrettyTable(["Mariner", "Name", "DebugInfo", "Version", "Arch", "Repo"])
 
 def cm1():
     """
@@ -44,9 +55,10 @@ def cm1():
     result = base.sack.query().filter(name=sys.argv[1]).available().latest()
     if result:
         for pkg in result:
-            print('| Mariner {} | {}\t| {}\t| {}\t| {}'.format(cmver, pkg.name,pkg.evr,pkg.arch, pkg.reponame))
+            repo = pkg.reponame.split("_")
+            myTable.add_row([cmver, pkg.name, pkg.debug_name, pkg.evr, pkg.arch, repo[-1]])
     else:
-            print('| Mariner {} | not found'.format(cmver))
+            myTable.add_row([cmver,"Not found", "X", "X", "X", "X"])
 
 def cm2():
     """
@@ -67,10 +79,18 @@ def cm2():
     result = base.sack.query().filter(name=sys.argv[1]).available().latest()
     if result:
         for pkg in result:
-            print('| Mariner {} | {}\t| {}\t| {}\t| {}'.format(cmver, pkg.name,pkg.evr,pkg.arch, pkg.reponame))
+            repo = pkg.reponame.split("_")
+            myTable.add_row([cmver, pkg.name, pkg.debug_name, pkg.evr, pkg.arch, repo[-1]])
     else:
-            print('| Mariner {} | not found'.format(cmver))
+            myTable.add_row([cmver,"Not found", "X", "X", "X", "X"])
+
+def reporting():
+    """
+    Prettytable format reporting
+    """
+    print(myTable)
 
 # Executing functions
 cm1()
 cm2()
+reporting()
