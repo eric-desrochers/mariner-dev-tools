@@ -5,9 +5,9 @@ __maintainer = "Eric Desrochers"
 __version__ = "1.0"
 __status__ = "Development"
 
+import argparse
 import dnf
 import sys
-import argparse
 from prettytable import PrettyTable
 
 parser=argparse.ArgumentParser(
