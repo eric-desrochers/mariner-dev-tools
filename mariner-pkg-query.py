@@ -84,7 +84,7 @@ def cm2():
     else:
             myTable.add_row([cmver,"--", "--", "--", "--", "--"])
 
-def reporting():
+def cm_report():
     """
     Prettytable format reporting
     """
@@ -93,4 +93,4 @@ def reporting():
 # Executing functions
 cm1()
 cm2()
-reporting()
+cm_report()
