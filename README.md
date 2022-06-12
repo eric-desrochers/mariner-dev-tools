@@ -1,6 +1,9 @@
 # mariner-dev-tools
 Tool to remotely query the Mariner archive database about packages
 
+## Status
+Development mode
+
 ## Support
 | Mariner   | x86_64 | aarch64 | debuginfo |
 | ----------| -------| --------| ----------|
