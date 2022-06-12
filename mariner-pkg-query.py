@@ -58,7 +58,7 @@ def cm1():
             repo = pkg.reponame.split("_")
             myTable.add_row([cmver, pkg.name, pkg.debug_name, pkg.evr, pkg.arch, repo[-1]])
     else:
-            myTable.add_row([cmver,"Not found", "X", "X", "X", "X"])
+            myTable.add_row([cmver,"--", "--", "--", "--", "--"])
 
 def cm2():
     """
@@ -82,7 +82,7 @@ def cm2():
             repo = pkg.reponame.split("_")
             myTable.add_row([cmver, pkg.name, pkg.debug_name, pkg.evr, pkg.arch, repo[-1]])
     else:
-            myTable.add_row([cmver,"Not found", "X", "X", "X", "X"])
+            myTable.add_row([cmver,"--", "--", "--", "--", "--"])
 
 def reporting():
     """
