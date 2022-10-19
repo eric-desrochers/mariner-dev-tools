@@ -26,3 +26,6 @@ $ ./mariner-pkg-query.py shadow-utils
 
 ## Getting started 
 [Official DNF API reference](https://dnf.readthedocs.io/en/latest/api.html)
+
+## Requirement
+tdnf install dnf python3-prettytable -y
